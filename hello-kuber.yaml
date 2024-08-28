@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-kub-deployment
+  labels:
+    app: hello-kub
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: hello-kub
+  template:
+    metadata:
+      labels:
+        app: hello-kub
+    spec:
+      containers:
+      - name: hello-kub-image
+        image: kckomaravolu/hello-kuber:v2
+        ports:
+        - containerPort: 8080
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: "Development"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello-kuber-service
+spec:
+  selector:
+    app: hello-kub
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+      nodePort: 30593
+  type: NodePort
